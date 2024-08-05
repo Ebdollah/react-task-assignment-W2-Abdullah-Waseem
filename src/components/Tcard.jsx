@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import CardComponent from './CardComponent';
+// import CardComponent from './CardComponent';
+import Cardc from './Cardc';
 
-const Card = () => {
+const Tcard = () => {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,13 +33,13 @@ const Card = () => {
   return ( 
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-4xl font-bold text-center mb-6 text-yellow-600">Star Wars Characters</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div className="">
         {people.map((p) => (
-          <CardComponent key={p.name} peoples={p} />
+          <Cardc key={p.name} peoples={p} />
         ))}
       </div>
     </div>
   );
 };
 
-export default Card;
+export default Tcard;
