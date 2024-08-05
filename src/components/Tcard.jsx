@@ -10,23 +10,31 @@ const Tcard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://swapi.dev/api/people/');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    const fetchAllData = async () => {
+      setLoading(true);
+      let allPeople = [];
+      let nextPageUrl = 'https://swapi.dev/api/people/';
+
+      while (nextPageUrl) {
+        try {
+          const response = await fetch(nextPageUrl);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          allPeople = [...allPeople, ...data.results];
+          nextPageUrl = data.next;
+        } catch (error) {
+          setError(error);
+          break;
         }
-        const data = await response.json();
-        setPeople(data.results);
-        setFilteredPeople(data.results); // Initialize filteredPeople with the full list
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
       }
+
+      setPeople(allPeople);
+      setLoading(false);
     };
 
-    fetchData();
+    fetchAllData();
   }, []);
 
   useEffect(() => {
@@ -43,14 +51,14 @@ const Tcard = () => {
     updateData();
   }, [filter, people]); // Also depend on people to reset when data changes
 
-  if (loading) return <div className="text-center mt-8">Loading...</div>;
-  if (error) return <div className="text-center mt-8">Error: {error.message}</div>;
+  if (loading) return <div className="text-center mt-8 text-gray-700">Loading...</div>;
+  if (error) return <div className="text-center mt-8 text-red-600">Error: {error.message}</div>;
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-4xl font-bold text-center mb-6 text-yellow-600">Star Wars Characters</h1>
+      <h1 className="text-4xl font-bold text-center mb-6 text-indigo-600">Star Wars Characters</h1>
       <Filter onSet={setFilter} />
-      <div className="">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         {filteredPeople.map((p) => (
           <Cardc key={p.name} peoples={p} />
         ))}
