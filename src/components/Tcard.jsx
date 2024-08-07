@@ -45,11 +45,11 @@ const Tcard = () => {
         );
         setFilteredPeople(filteredItems);
       } else {
-        setFilteredPeople(people); // Reset to full list when filter is cleared
+        setFilteredPeople(people); 
       }
     };
     updateData();
-  }, [filter, people]); // Also depend on people to reset when data changes
+  }, [filter, people]);
 
   if (loading) return <div className="text-center mt-8 text-gray-700">Loading...</div>;
   if (error) return <div className="text-center mt-8 text-red-600">Error: {error.message}</div>;
